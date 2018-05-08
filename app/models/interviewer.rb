@@ -1,22 +1,32 @@
 class Interviewer < ApplicationRecord
   has_many :answer_ratings
-  has_many :interviews
+  has_many :interview_participants
+  has_many :interviews, through: :interview_participants
 
-  def upcoming_interview_schedule
-    upcoming_interviews = interviews.where('interview_date >= ?', DateTime.now).order(:interview_date).first(2)
-    upcoming_interviews.each do |i|
-      puts "Candidate Information :"
-      puts "Name : #{i.candidate.name}"
-      puts "Email : #{i.candidate.email}"
-      puts "Phone : #{i.candidate.phone}"
-      puts "Interview Date : #{i.interview_date}"
-      puts "\n"
-      puts "List of Questions :"
-      i.questions.each do |q|
-        puts "#{q.question}"
-      end
-      puts "\n\n"
-    end
+  def upcoming_interviews
+    interviews.where('interview_date >= ?', DateTime.now).order(:interview_date).first(2) 
+  end
+
+  def upcoming_interview_candidates
+    to_json
+  end
+
+  def as_json options={}
+    super(only: [],
+            include: {
+                      upcoming_interviews: {
+                        only: [:interview_date, :description],
+                        include: {
+                           candidate: {
+                             only: [:name, :email, :phone]
+                           },
+                           questions: {
+                             only: [:question]
+                           }
+                        }
+                      }
+                      }
+          )
   end
 
 end

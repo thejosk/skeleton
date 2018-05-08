@@ -4,6 +4,7 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
+
 one_truck_manager:
   interviewer: fleet_manger
   interview: first_driver_interview
@@ -27,6 +28,7 @@ two_truck_hr:
 two_truck_union:
   interviewer: union
   interview: second_driver_interview
+
 
 one_lift_manager:
   interviewer: warehouse
